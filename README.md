@@ -85,7 +85,7 @@ Open your browser and go to: `http://localhost:5173`
 Home page-
 ![alt text](image-1.png)
 My polls-
-![alt text](image-2.png)
+![alt text](image-5.png)
 Poll-detail-
 ![alt text](image-3.png)
 Create-poll-
