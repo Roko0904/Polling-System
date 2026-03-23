@@ -89,7 +89,7 @@ My polls-
 Poll-detail-
 ![alt text](image-3.png)
 Create-poll-
- ![alt text](image-4.png)
+![alt text](image-6.png)
 >  
 
 ## Notes
