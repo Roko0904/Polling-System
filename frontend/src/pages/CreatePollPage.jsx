@@ -122,7 +122,7 @@ export default function CreatePollPage({ navigate, onCreated }) {
           disabled={loading}
           className="w-full bg-indigo-600 hover:bg-indigo-700 disabled:opacity-60 text-white font-semibold py-3.5 rounded-2xl transition-colors text-sm shadow-sm shadow-indigo-200"
         >
-          {loading ? 'Creating poll...' : 'Launch Poll 🚀'}
+          {loading ? 'Creating poll...' : 'Launch Poll '}
         </button>
       </div>
          
