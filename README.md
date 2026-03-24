@@ -82,6 +82,7 @@ Open your browser and go to: `http://localhost:5173`
 | DELETE | /api/polls/:id | Delete a poll |
 
 ## Screenshots
+
 Home page-
 ![alt text](image-1.png)
 My polls-
@@ -90,6 +91,11 @@ Poll-detail-
 ![alt text](image-3.png)
 Create-poll-
 ![alt text](image-6.png)
+Login-
+![alt text](image-7.png)
+signup-
+ ![alt text](image-4.png)
+
 >  
 
 ## Notes
