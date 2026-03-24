@@ -130,14 +130,8 @@ export default function HomePage({ navigate }) {
           </div>
         )}
 
-        {/* Load more */}
-        {polls.length > 0 && (
-          <div className="text-center mt-10">
-            <button className="border border-gray-200 text-gray-500 hover:border-indigo-300 hover:text-indigo-600 font-medium px-8 py-3 rounded-full transition-colors text-sm">
-              Load More Polls
-            </button>
-          </div>
-        )}
+        
+         
       </div>
 
       {/* Footer */}

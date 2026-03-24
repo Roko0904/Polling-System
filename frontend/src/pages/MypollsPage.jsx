@@ -2,10 +2,12 @@ import { useState, useEffect } from 'react'
 import axios from 'axios'
 import PollCard from '../components/PollCard'
 import { MdOutlineFindInPage } from "react-icons/md";
+import { useAuth } from '../context/AuthContext'
 
 export default function MyPollsPage({ navigate }) {
   const [polls, setPolls] = useState([])
   const [loading, setLoading] = useState(true)
+  const { token } = useAuth()
 
   useEffect(() => {
     fetchPolls()
@@ -22,16 +24,19 @@ export default function MyPollsPage({ navigate }) {
     setLoading(false)
   }
 
-  const deletePoll = async (id, e) => {
-    e.stopPropagation()
-    if (!confirm('Are you sute deleted this poll?')) return
-    try {
-      await axios.delete(`http://localhost:5000/api/polls/${id}`)
-      fetchPolls()
-    } catch (err) {
-      alert('Delete failed')
-    }
+const deletePoll = async (id, e) => {
+  e.stopPropagation()
+  if (!confirm('Are you you want dlt thus pole?')) return
+  try {
+    await axios.delete(`http://localhost:5000/api/polls/${id}`, {
+      headers: { Authorization: `Bearer ${token}` }
+    })
+    fetchPolls()
+  } catch (err) {
+    console.log('Delete error:', err.response?.data)
+    alert(err.response?.data?.error || 'Delete failed')
   }
+}
 
   return (
     <div className="min-h-screen flex flex-col bg-[#f5f4ff]">

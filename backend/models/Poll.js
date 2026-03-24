@@ -15,6 +15,8 @@ const pollSchema = new mongoose.Schema({
     }
   },
   expiresAt: { type: Date, required: true },
+  createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  createdByName: { type: String },
   createdAt: { type: Date, default: Date.now }
 });
 

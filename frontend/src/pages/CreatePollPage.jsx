@@ -1,8 +1,10 @@
 import { useState } from 'react'
 import axios from 'axios'
+import { useAuth } from '../context/AuthContext'
  
 
 export default function CreatePollPage({ navigate, onCreated }) {
+  const { token } = useAuth()
   const [question, setQuestion] = useState('')
   const [options, setOptions] = useState(['', ''])
   const [expiry, setExpiry] = useState('')
@@ -27,6 +29,8 @@ export default function CreatePollPage({ navigate, onCreated }) {
         question,
         options: options.filter(Boolean),
         expiresAt: new Date(expiry).toISOString()
+      },{
+       headers: { Authorization: `Bearer ${token}` } 
       })
       onCreated()
     } catch (err) {
@@ -111,7 +115,9 @@ export default function CreatePollPage({ navigate, onCreated }) {
           <input
             type="datetime-local"
             value={expiry}
+
             onChange={e => setExpiry(e.target.value)}
+            min={new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 16)}
             className="border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent"
           />
         </div>

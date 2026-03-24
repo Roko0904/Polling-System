@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
+import { useAuth } from '../context/AuthContext'
 
 export default function PollDetailPage({ poll: initialPoll, navigate, onVote }) {
+  const { token, isLoggedIn } = useAuth()
   const [poll, setPoll] = useState(initialPoll)
   const [voted, setVoted] = useState(false)
   const [voting, setVoting] = useState(null)
@@ -14,13 +16,11 @@ export default function PollDetailPage({ poll: initialPoll, navigate, onVote }) 
 
   useEffect(() => {
     if (!poll) return
-    // LocalStorage check
     const votedPolls = JSON.parse(localStorage.getItem('votedPolls') || '{}')
     if (votedPolls[poll._id] !== undefined) {
       setVoted(true)
       setSelectedOption(votedPolls[poll._id])
     }
-    // Timer
     const update = () => {
       const diff = new Date(poll.expiresAt) - new Date()
       if (diff <= 0) { setTimeLeft('Ended'); return }
@@ -35,10 +35,15 @@ export default function PollDetailPage({ poll: initialPoll, navigate, onVote }) 
   }, [poll])
 
   const castVote = async () => {
+    if (!isLoggedIn) {
+      alert('please login first!')
+      navigate('login')
+      return
+    }
     if (selectedOption === null || !isActive || voted) return
     const votedPolls = JSON.parse(localStorage.getItem('votedPolls') || '{}')
     if (votedPolls[poll._id] !== undefined) {
-      alert('You already voted!')
+      alert('already voted!')
       setVoted(true)
       return
     }
@@ -46,6 +51,8 @@ export default function PollDetailPage({ poll: initialPoll, navigate, onVote }) 
     try {
       const res = await axios.post(`http://localhost:5000/api/polls/${poll._id}/vote`, {
         optionIndex: selectedOption
+      }, {
+        headers: { Authorization: `Bearer ${token}` }
       })
       votedPolls[poll._id] = selectedOption
       localStorage.setItem('votedPolls', JSON.stringify(votedPolls))
@@ -65,7 +72,6 @@ export default function PollDetailPage({ poll: initialPoll, navigate, onVote }) 
   return (
     <div className="min-h-screen flex flex-col bg-[#f5f4ff]">
       <div className="flex-1 max-w-6xl mx-auto px-6 py-8 w-full">
-        {/* Back */}
         <button
           onClick={() => navigate('home')}
           className="flex items-center gap-2 text-xs text-gray-400 hover:text-indigo-600 mb-8 transition-colors font-semibold uppercase tracking-widest"
@@ -77,7 +83,6 @@ export default function PollDetailPage({ poll: initialPoll, navigate, onVote }) 
         </button>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Left — Main poll */}
           <div className="lg:col-span-2 space-y-5">
             <div className="bg-white rounded-3xl border border-gray-100 p-7">
               <div className="flex justify-end mb-4">
@@ -100,7 +105,6 @@ export default function PollDetailPage({ poll: initialPoll, navigate, onVote }) 
                 {poll.question}
               </h1>
 
-              {/* Options to vote */}
               {isActive && !voted ? (
                 <div className="space-y-3 mb-6">
                   {poll.options.map((opt, i) => (
@@ -119,7 +123,6 @@ export default function PollDetailPage({ poll: initialPoll, navigate, onVote }) 
                 </div>
               ) : null}
 
-              {/* Results */}
               {(voted || !isActive) && (
                 <div className="space-y-4 mb-6">
                   <h3 className="text-sm font-bold text-gray-700 uppercase tracking-wide">Real-time Results</h3>
@@ -156,7 +159,6 @@ export default function PollDetailPage({ poll: initialPoll, navigate, onVote }) 
                 </div>
               )}
 
-              {/* Cast Vote button */}
               {isActive && !voted && (
                 <button
                   onClick={castVote}
@@ -167,15 +169,20 @@ export default function PollDetailPage({ poll: initialPoll, navigate, onVote }) 
                 </button>
               )}
 
+              {!isLoggedIn && isActive && (
+                <p className="text-amber-500 text-sm font-medium mt-3">
+                   If you want to vote, please login  first!
+                </p>
+              )}
+
               {voted && (
                 <p className="text-green-600 font-semibold text-sm flex items-center gap-2">
-                  <span></span> Vote cast successfully!
+                   Vote cast successfully!
                 </p>
               )}
             </div>
           </div>
 
-          {/* Right sidebar */}
           <div className="space-y-4">
             <div className="bg-white rounded-3xl border border-gray-100 p-6">
               {isActive ? (
@@ -233,7 +240,7 @@ export default function PollDetailPage({ poll: initialPoll, navigate, onVote }) 
           </div>
         </div>
       </div>
-     {/* Footer */}
+
       <footer className="border-t border-gray-100 bg-white w-full">
         <div className="max-w-6xl mx-auto px-6 py-10 flex flex-col md:flex-row justify-between items-start gap-6">
           <div>
