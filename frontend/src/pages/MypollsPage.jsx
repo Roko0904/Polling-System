@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import PollCard from '../components/PollCard'
-import { MdOutlineFindInPage } from "react-icons/md";
+ 
 import { useAuth } from '../context/AuthContext'
 
 export default function MyPollsPage({ navigate }) {
