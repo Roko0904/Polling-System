@@ -3,10 +3,11 @@ import { AuthProvider, useAuth } from './context/AuthContext'
 import Navbar from './components/Navbar'
 import HomePage from './pages/HomePage'
 import CreatePollPage from './pages/CreatePollPage'
-import PollDetailPage from './pages/PollDetailpage'
+import PollDetailPage from "./pages/PollDetailpage.jsx"
 import MyPollsPage from './pages/MypollsPage'
 import LoginPage from './pages/LoginPage'
 import RegisterPage from './pages/RegisterPage'
+
 
 function AppContent() {
   const { isLoggedIn } = useAuth()

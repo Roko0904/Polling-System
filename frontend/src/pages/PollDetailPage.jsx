@@ -14,25 +14,27 @@ export default function PollDetailPage({ poll: initialPoll, navigate, onVote }) 
   const totalVotes = poll ? poll.options.reduce((s, o) => s + o.votes, 0) : 0
   const winner = !isActive && poll && [...poll.options].sort((a, b) => b.votes - a.votes)[0]
 
-  useEffect(() => {
-    if (!poll) return
-    const votedPolls = JSON.parse(localStorage.getItem('votedPolls') || '{}')
-    if (votedPolls[poll._id] !== undefined) {
-      setVoted(true)
-      setSelectedOption(votedPolls[poll._id])
+   
+
+   useEffect(() => {
+  if (!poll) return
+
+  const update = () => {
+    const diff = new Date(poll.expiresAt) - new Date()
+    if (diff <= 0) {
+      setTimeLeft('Ended')
+      return
     }
-    const update = () => {
-      const diff = new Date(poll.expiresAt) - new Date()
-      if (diff <= 0) { setTimeLeft('Ended'); return }
-      const h = Math.floor(diff / 3600000)
-      const m = Math.floor((diff % 3600000) / 60000)
-      const s = Math.floor((diff % 60000) / 1000)
-      setTimeLeft(`${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`)
-    }
-    update()
-    const interval = setInterval(update, 1000)
-    return () => clearInterval(interval)
-  }, [poll])
+    const h = Math.floor(diff / 3600000)
+    const m = Math.floor((diff % 3600000) / 60000)
+    const s = Math.floor((diff % 60000) / 1000)
+    setTimeLeft(`${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`)
+  }
+
+  update()
+  const interval = setInterval(update, 1000)
+  return () => clearInterval(interval)
+}, [poll])
 
   const castVote = async () => {
     if (!isLoggedIn) {
@@ -66,8 +68,8 @@ export default function PollDetailPage({ poll: initialPoll, navigate, onVote }) 
   }
 
   if (!poll) return null
-
-  const timeParts = timeLeft.split(':')
+const timeParts = timeLeft ? timeLeft.split(':') : []
+  
 
   return (
     <div className="min-h-screen flex flex-col bg-[#f5f4ff]">
@@ -171,7 +173,7 @@ export default function PollDetailPage({ poll: initialPoll, navigate, onVote }) 
 
               {!isLoggedIn && isActive && (
                 <p className="text-amber-500 text-sm font-medium mt-3">
-                   If you want to vote, please login  first!
+                   If you want to vote, please login  !
                 </p>
               )}
 

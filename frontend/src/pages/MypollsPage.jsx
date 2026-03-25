@@ -9,35 +9,35 @@ export default function MyPollsPage({ navigate }) {
   const [loading, setLoading] = useState(true)
   const { token } = useAuth()
 
-  useEffect(() => {
+    useEffect(() => {
+    const fetchPolls = async () => {   
+      setLoading(true)
+      try {
+        const res = await axios.get('http://localhost:5000/api/polls')
+        setPolls(res.data)
+      } catch (err) {
+        console.error(err)
+      }
+      setLoading(false)
+    }
+
     fetchPolls()
   }, [])
 
-  const fetchPolls = async () => {
-    setLoading(true)
+
+  const deletePoll = async (id, e) => {
+    e.stopPropagation()
+    if (!confirm('Are you you want dlt thus pole?')) return
     try {
-      const res = await axios.get('http://localhost:5000/api/polls')
-      setPolls(res.data)
+      await axios.delete(`http://localhost:5000/api/polls/${id}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      })
+      window.location.reload()
     } catch (err) {
-      console.error(err)
+      console.log('Delete error:', err.response?.data)
+      alert(err.response?.data?.error || 'Delete failed')
     }
-    setLoading(false)
   }
-
-const deletePoll = async (id, e) => {
-  e.stopPropagation()
-  if (!confirm('Are you you want dlt thus pole?')) return
-  try {
-    await axios.delete(`http://localhost:5000/api/polls/${id}`, {
-      headers: { Authorization: `Bearer ${token}` }
-    })
-    fetchPolls()
-  } catch (err) {
-    console.log('Delete error:', err.response?.data)
-    alert(err.response?.data?.error || 'Delete failed')
-  }
-}
-
   return (
     <div className="min-h-screen flex flex-col bg-[#f5f4ff]">
       <div className="flex-1 max-w-6xl mx-auto px-6 py-10 w-full">

@@ -5,19 +5,23 @@ import PollCard from './PollCard';
 export default function PollList() {
   const [polls, setPolls] = useState([]);
   const [filter, setFilter] = useState('all');
+  const [refresh, setRefresh] = useState(0);
 
-  const fetchPolls = async () => {
-    const res = await axios.get(`http://localhost:5000/api/polls?filter=${filter}`);
-    setPolls(res.data);
-  };
+  useEffect(() => {
+    let cancelled = false;
+    axios
+      .get(`http://localhost:5000/api/polls?filter=${filter}`)
+      .then(res => { if (!cancelled) setPolls(res.data); })
+      .catch(err => console.error(err));
+    return () => { cancelled = true; };
+  }, [filter, refresh]);
 
-  useEffect(() => { fetchPolls(); }, [filter]);
+  const refetch = () => setRefresh(r => r + 1);
 
   const filters = ['all', 'active', 'expired'];
 
   return (
     <div>
-      {/* Filter Tabs */}
       <div className="flex gap-2 mb-6">
         {filters.map(f => (
           <button
@@ -34,14 +38,13 @@ export default function PollList() {
         ))}
       </div>
 
-      {/* Poll Cards */}
       {polls.length === 0 ? (
         <div className="text-center py-16 text-gray-400">
-          <p className="text-4xl mb-3">🗳️</p>
+          <p className="text-4xl mb-3"></p>
           <p className="text-sm">No polls found. Create one above!</p>
         </div>
       ) : (
-        polls.map(p => <PollCard key={p._id} poll={p} onVote={fetchPolls} />)
+        polls.map(p => <PollCard key={p._id} poll={p} onVote={refetch} />)
       )}
     </div>
   );

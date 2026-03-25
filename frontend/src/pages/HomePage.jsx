@@ -7,10 +7,10 @@ export default function HomePage({ navigate }) {
   const [filter, setFilter] = useState('all')
   const [loading, setLoading] = useState(true)
 
-  useEffect(() => {
-    fetchPolls()
-  }, [filter])
+  
 
+
+ useEffect(() => {
   const fetchPolls = async () => {
     setLoading(true)
     try {
@@ -22,8 +22,8 @@ export default function HomePage({ navigate }) {
     setLoading(false)
   }
 
-  const activePolls = polls.filter(p => new Date(p.expiresAt) > new Date())
-  const expiredPolls = polls.filter(p => new Date(p.expiresAt) <= new Date())
+  fetchPolls()
+}, [filter])  
 
   return (
     <div>
@@ -39,30 +39,27 @@ export default function HomePage({ navigate }) {
             feedback, and reach a consensus in seconds.
           </p>
           <div className="flex">
-          <button
-            onClick={() => navigate('create')}
-            className="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-12 py-3.5 rounded-full flex items-center gap-2 transition-colors shadow-sm shadow-indigo-200 text-base"
+            <button
+              onClick={() => navigate('create')}
+              className="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-12 py-3.5 rounded-full flex items-center gap-2 transition-colors shadow-sm shadow-indigo-200 text-base"
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
               </svg>
               Create New Poll
             </button>
-             
           </div>
         </div>
       </div>
 
       {/* Polls Section */}
       <div className="max-w-6xl mx-auto px-6 pb-16">
-        {/* Section header */}
         <div className="flex items-end justify-between mb-6">
           <div>
             <h2 className="text-2xl font-bold text-gray-900">Trending Polls</h2>
             <p className="text-gray-400 text-sm mt-1">Discover what people are deciding right now.</p>
           </div>
 
-          {/* Filter tabs */}
           <div className="flex bg-white border border-gray-100 rounded-full p-1 gap-1">
             {['all', 'active', 'expired'].map(f => (
               <button
@@ -80,7 +77,6 @@ export default function HomePage({ navigate }) {
           </div>
         </div>
 
-        {/* Poll Grid */}
         {loading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {[1, 2, 3].map(i => (
@@ -112,7 +108,6 @@ export default function HomePage({ navigate }) {
             {polls.map(p => (
               <PollCard key={p._id} poll={p} navigate={navigate} />
             ))}
-            {/* Create custom poll card */}
             <div
               onClick={() => navigate('create')}
               className="bg-white rounded-2xl border-2 border-dashed border-gray-200 p-5 cursor-pointer hover:border-indigo-300 hover:bg-indigo-50/30 transition-all duration-200 flex flex-col items-center justify-center min-h-[180px] gap-3"
@@ -129,12 +124,8 @@ export default function HomePage({ navigate }) {
             </div>
           </div>
         )}
-
-        
-         
       </div>
 
-      {/* Footer */}
       <footer className="border-t border-gray-100 bg-white">
         <div className="max-w-6xl mx-auto px-6 py-10 flex flex-col md:flex-row justify-between items-start gap-6">
           <div>
