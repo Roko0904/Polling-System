@@ -3,7 +3,7 @@ import { AuthProvider, useAuth } from './context/AuthContext'
 import Navbar from './components/Navbar'
 import HomePage from './pages/HomePage'
 import CreatePollPage from './pages/CreatePollPage'
-import PollDetailPage from "./pages/PollDetailPage"
+import PollDetailPage from "./pages/PollCardDetail"
 import MyPollsPage from './pages/MypollsPage'
 import LoginPage from './pages/LoginPage'
 import RegisterPage from './pages/RegisterPage'
