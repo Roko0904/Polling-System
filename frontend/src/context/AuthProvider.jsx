@@ -1,6 +1,5 @@
-import { createContext, useContext, useState } from 'react'
-
-const AuthContext = createContext()
+import { useState } from 'react'
+import { AuthContext } from './AuthContext'
 
 export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem('token'))
@@ -26,6 +25,3 @@ export const AuthProvider = ({ children }) => {
     </AuthContext.Provider>
   )
 }
-
- 
-export const useAuth = () => useContext(AuthContext)
