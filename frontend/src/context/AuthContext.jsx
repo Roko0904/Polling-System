@@ -7,6 +7,8 @@ export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem('token'))
   const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')))
 
+  const url= window.location.origin.includes("localhost")?"http://localhost:5000/": "https://polling-system-det7.vercel.app/"
+
   const login = (userData, tokenData) => {
     setUser(userData)
     setToken(tokenData)
@@ -22,7 +24,7 @@ export const AuthProvider = ({ children }) => {
   }
 
   return (
-    <AuthContext.Provider value={{ user, token, login, logout, isLoggedIn: !!token }}>
+    <AuthContext.Provider value={{ url,user, token, login, logout, isLoggedIn: !!token }}>
       {children}
     </AuthContext.Provider>
   )

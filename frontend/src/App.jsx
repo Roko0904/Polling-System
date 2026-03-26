@@ -2,10 +2,11 @@ import { useState } from 'react'
 import { AuthProvider, useAuth } from './context/AuthContext'
 import Navbar from './components/Navbar'
 import HomePage from './pages/HomePage'
-import CreatePollPage from './pages/CreatePollPage'
+
+import CreatePollPage from './pages/CreatePoll'
 import PollDetailPage from "./pages/PollCardDetail"
 import MyPollsPage from './pages/MypollsPage'
-import LoginPage from './pages/LoginPage'
+import LoginPage from './pages/Login'
 import RegisterPage from './pages/RegisterPage'
 
 
@@ -41,20 +42,19 @@ function AppContent() {
   }
 
   return (
-    <div className="min-h-screen bg-[#f5f4ff] font-sans">
+    <div className="min-h-screen bg-[#f5f4ff] font-sans ">
       <Navbar navigate={navigate} currentPage={page} />
 
       {page === 'home' && (
         <HomePage navigate={navigate} key={refresh} />
       )}
       {page === 'create' && (
-        <CreatePollPage
-          navigate={navigate}
+        <CreatePollPage  navigate={navigate}
           onCreated={() => {
             setRefresh(r => r + 1)
             navigate('home')
-          }}
-        />
+          }}/>
+       
       )}
       {page === 'mypolls' && (
         <MyPollsPage navigate={navigate} key={refresh} />
@@ -66,7 +66,7 @@ function AppContent() {
           onVote={() => setRefresh(r => r + 1)}
         />
       )}
-      {page === 'login' && <LoginPage navigate={navigate} />}
+      {page === 'login' && <LoginPage navigate={navigate}/>}
       {page === 'register' && <RegisterPage navigate={navigate} />}
     </div>
   )

@@ -1,11 +1,16 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import axios from 'axios'
 import PollCard from '../components/PollCard'
+import { useAuth } from '../context/AuthContext'
 
 export default function HomePage({ navigate }) {
   const [polls, setPolls] = useState([])
   const [filter, setFilter] = useState('all')
   const [loading, setLoading] = useState(true)
+
+ 
+  const {url} = useAuth()
+
 
   
 
@@ -14,7 +19,7 @@ export default function HomePage({ navigate }) {
   const fetchPolls = async () => {
     setLoading(true)
     try {
-      const res = await axios.get(`http://localhost:5000/api/polls?filter=${filter}`)
+      const res = await axios.get(`${url}api/polls?filter=${filter}`)
       setPolls(res.data)
     } catch (err) {
       console.error(err)
@@ -23,7 +28,7 @@ export default function HomePage({ navigate }) {
   }
 
   fetchPolls()
-}, [filter])  
+}, [filter,url])  
 
   return (
     <div>

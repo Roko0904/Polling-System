@@ -7,6 +7,8 @@ export default function LoginPage({ navigate }) {
   const [form, setForm] = useState({ email: '', password: '' })
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+    const {url} = useAuth()
+  
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value })
@@ -20,7 +22,7 @@ export default function LoginPage({ navigate }) {
     }
     setLoading(true)
     try {
-      const res = await axios.post('http://localhost:5000/api/auth/login', form)
+      const res = await axios.post(`${url}api/auth/login`, form)
       login(res.data.user, res.data.token)
       navigate('home')
     } catch (err) {

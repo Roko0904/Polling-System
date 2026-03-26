@@ -7,6 +7,8 @@ export default function RegisterPage({ navigate }) {
   const [form, setForm] = useState({ name: '', email: '', password: '', confirm: '' })
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+    const {url} = useAuth()
+  
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value })
@@ -28,7 +30,7 @@ export default function RegisterPage({ navigate }) {
     }
     setLoading(true)
     try {
-      const res = await axios.post('http://localhost:5000/api/auth/register', {
+      const res = await axios.post(`${url}api/auth/register`, {
         name: form.name,
         email: form.email,
         password: form.password

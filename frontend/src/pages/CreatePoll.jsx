@@ -9,6 +9,8 @@ export default function CreatePollPage({ navigate, onCreated }) {
   const [options, setOptions] = useState(['', ''])
   const [expiry, setExpiry] = useState('')
   const [loading, setLoading] = useState(false)
+    const {url} = useAuth()
+  
 
   const addOption = () => options.length < 4 && setOptions([...options, ''])
   const removeOption = (i) => options.length > 2 && setOptions(options.filter((_, idx) => idx !== i))
@@ -20,12 +22,12 @@ export default function CreatePollPage({ navigate, onCreated }) {
 
   const submit = async () => {
     if (!question.trim() || options.filter(Boolean).length < 2 || !expiry) {
-      alert('Saare fields bharo!')
+      alert('please fill all field!')
       return
     }
     setLoading(true)
     try {
-      await axios.post('http://localhost:5000/api/polls', {
+      await axios.post(`${url}/api/polls`, {
         question,
         options: options.filter(Boolean),
         expiresAt: new Date(expiry).toISOString()

@@ -1,20 +1,25 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import PollCard from './PollCard';
+import { AuthProvider } from '../context/AuthContext';
 
 export default function PollList() {
   const [polls, setPolls] = useState([]);
   const [filter, setFilter] = useState('all');
   const [refresh, setRefresh] = useState(0);
+   const Authcontext = useContext(AuthProvider)
+    const {url} = Authcontext
+  
 
   useEffect(() => {
     let cancelled = false;
     axios
-      .get(`http://localhost:5000/api/polls?filter=${filter}`)
+    
+      .get(`${url}api/polls?filter=${filter}`)
       .then(res => { if (!cancelled) setPolls(res.data); })
       .catch(err => console.error(err));
     return () => { cancelled = true; };
-  }, [filter, refresh]);
+  }, [filter, refresh, url]);
 
   const refetch = () => setRefresh(r => r + 1);
 

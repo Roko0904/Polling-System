@@ -9,6 +9,8 @@ export default function PollDetailPage({ poll: initialPoll, navigate, onVote }) 
   const [voting, setVoting] = useState(null)
   const [selectedOption, setSelectedOption] = useState(null)
   const [timeLeft, setTimeLeft] = useState('')
+    const {url} = useAuth()
+  
 
   const isActive = poll && new Date(poll.expiresAt) > new Date()
   const totalVotes = poll ? poll.options.reduce((s, o) => s + o.votes, 0) : 0
@@ -51,7 +53,7 @@ export default function PollDetailPage({ poll: initialPoll, navigate, onVote }) 
     }
     setVoting(selectedOption)
     try {
-      const res = await axios.post(`http://localhost:5000/api/polls/${poll._id}/vote`, {
+      const res = await axios.post(`${url}api/polls/${poll._id}/vote`, {
         optionIndex: selectedOption
       }, {
         headers: { Authorization: `Bearer ${token}` }

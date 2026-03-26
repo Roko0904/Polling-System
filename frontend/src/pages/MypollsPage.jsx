@@ -7,13 +7,13 @@ import { useAuth } from '../context/AuthContext'
 export default function MyPollsPage({ navigate }) {
   const [polls, setPolls] = useState([])
   const [loading, setLoading] = useState(true)
-  const { token } = useAuth()
+  const { token, url } = useAuth()
 
     useEffect(() => {
     const fetchPolls = async () => {   
       setLoading(true)
       try {
-        const res = await axios.get('http://localhost:5000/api/polls')
+        const res = await axios.get(`${url}api/polls`)
         setPolls(res.data)
       } catch (err) {
         console.error(err)
@@ -22,14 +22,14 @@ export default function MyPollsPage({ navigate }) {
     }
 
     fetchPolls()
-  }, [])
+  }, [url])
 
 
   const deletePoll = async (id, e) => {
     e.stopPropagation()
     if (!confirm('Are you you want dlt thus pole?')) return
     try {
-      await axios.delete(`http://localhost:5000/api/polls/${id}`, {
+      await axios.delete(`${url}api/polls/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       })
       window.location.reload()
